@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\FishResource;
 use App\Models\Fish;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class FishController extends Controller
 {
@@ -14,17 +16,7 @@ class FishController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return FishResource::collection(Fish::latest()->get());
     }
 
     /**
@@ -35,7 +27,9 @@ class FishController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //auth()->user()->fish()->create($request()); Depois dos testes do postman, utilizar criacao para o usuario logado.
+        Fish::create($request->all());
+        return response('Fish inserido com sucesso', Response::HTTP_CREATED);
     }
 
     /**
@@ -46,18 +40,7 @@ class FishController extends Controller
      */
     public function show(Fish $fish)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Fish  $fish
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Fish $fish)
-    {
-        //
+        return new FishResource($fish);
     }
 
     /**
@@ -80,6 +63,7 @@ class FishController extends Controller
      */
     public function destroy(Fish $fish)
     {
-        //
+        $fish->delete();
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 }
