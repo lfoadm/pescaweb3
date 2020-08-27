@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Response;
+use Illuminate\Support\Str;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -14,17 +16,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return Category::latest()->get();
     }
 
     /**
@@ -35,7 +27,13 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //Category::create($request->all());
+        $category = new Category;
+        $category->name = $request->name;
+        $category->slug = Str::slug($request->name);
+        $category->save();
+
+        return response('Categoria inserida com sucesso', Response::HTTP_CREATED);
     }
 
     /**
@@ -46,18 +44,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Category $category)
-    {
-        //
+        return $category;
     }
 
     /**
@@ -69,7 +56,12 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $category->update([
+            'name' => $request->name,
+            'slug' => Str::slug($request->name),
+        ]);
+
+        return response('CATEGORIA ATUALIZADA COM SUCESSO', Response::HTTP_ACCEPTED);
     }
 
     /**
@@ -80,6 +72,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        $category->delete();
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 }

@@ -52,7 +52,8 @@ class FishController extends Controller
      */
     public function update(Request $request, Fish $fish)
     {
-        //
+        $fish->update($request->all());
+        return response('ATUALIZADO COM SUCESSO PEIXE', response::HTTP_ACCEPTED);
     }
 
     /**
