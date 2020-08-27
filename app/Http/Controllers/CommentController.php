@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CommentResource;
+use Illuminate\Http\Response;
 use App\Models\Comment;
+use App\Models\Fish;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -12,19 +15,9 @@ class CommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Fish $fish)
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return CommentResource::collection($fish->comments);
     }
 
     /**
@@ -33,9 +26,10 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Fish $fish, Request $request)
     {
-        //
+        $comment = $fish->comments()->create($request->all());
+        return response(['comment' => new CommentResource($comment)], Response::HTTP_CREATED);
     }
 
     /**
@@ -44,9 +38,9 @@ class CommentController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function show(Comment $comment)
+    public function show(Fish $fish, Comment $comment)
     {
-        //
+        return new CommentResource($comment);
     }
 
     /**
@@ -67,9 +61,10 @@ class CommentController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Comment $comment)
+    public function update(Fish $fish, Request $request, Comment $comment)
     {
-        //
+        $comment->update($request->all());
+        return response('Comentario atualizado Com SUCESSOOOOOOOOOOO', Response::HTTP_ACCEPTED);
     }
 
     /**
@@ -78,8 +73,9 @@ class CommentController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Comment $comment)
+    public function destroy(Fish $fish, Comment $comment)
     {
-        //
+        $comment->delete();
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 }

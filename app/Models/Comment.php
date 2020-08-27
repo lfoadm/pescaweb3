@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
+    protected $guarded = [];
+
     public function fish()
     {
         return $this->belongsTo(Fish::class);
