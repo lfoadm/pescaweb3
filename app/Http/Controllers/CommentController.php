@@ -9,7 +9,17 @@ use App\Models\Fish;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
-{
+{    
+    /**
+     * Create a new AuthController instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('JWT', ['except' => ['index', 'show']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
