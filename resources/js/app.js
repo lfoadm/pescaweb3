@@ -11,7 +11,7 @@ import 'vuetify/dist/vuetify.min.css'
 import User from './Helpers/User'
 window.User = User
 
-
+window.EventBus = new Vue();
 
 
 Vue.component('AppHome', require('./components/AppHome.vue').default);

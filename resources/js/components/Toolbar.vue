@@ -8,8 +8,20 @@
 
                 <v-spacer></v-spacer>
 
-                <div>
-                    <router-link to="/fish">
+                <div class="hidden-sm-and-down">
+
+                    <router-link
+                    v-for="item in items"
+                    :key="item.title"
+                    :to="item.to"
+                    v-if="item.show">
+                        <v-btn icon>
+                            <v-icon>{{item.title}}</v-icon>
+                        </v-btn>
+                    </router-link>
+
+
+                    <!-- <router-link to="/fish">
                         <v-btn icon>
                             <v-icon>mdi-home</v-icon>
                         </v-btn>
@@ -31,7 +43,9 @@
                         <v-btn icon>
                             <v-icon>mdi-login</v-icon>
                         </v-btn>
-                    </router-link>
+                    </router-link> -->
+
+
                 </div>
             </v-toolbar>
         </v-card>
@@ -39,7 +53,24 @@
 </template>
 
 <script>
-export default {};
+export default {
+    data(){
+        return{
+            items: [
+                { title: 'mdi-home', to: '/fish', show: true},                
+                { title: 'mdi-fish', to: '/comment', show: User.loggedIn()},
+                { title: 'mdi-filter-variant', to: '/category', show: User.loggedIn()},
+                { title: 'mdi-login', to: '/login', show: !User.loggedIn()},
+                { title: 'mdi-logout', to: '/logout', show: User.loggedIn()},
+            ]
+        }
+    },
+    created(){
+        EventBus.$on('logout', () => {
+            User.logout()
+        });
+    }
+}
 </script>
 
 <style></style>
